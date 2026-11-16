@@ -3,3 +3,4 @@ __pycache__/
 data/sounds.json
 data/sounds_temp.json
 sounds/custom/*.wav
+sounds/recording_preview.wav
