@@ -17,7 +17,17 @@ def load_sounds():
         with open(SOUNDS_FILE, "r", encoding="utf-8") as file:
             data = json.load(file)
 
-        return data.get("sounds", [])
+        sounds = data.get("sounds", [])
+        if not isinstance(sounds, list):
+            return []
+
+        return [
+            sound for sound in sounds
+            if isinstance(sound, dict)
+            and "id" in sound
+            and "name" in sound
+            and "file" in sound
+        ]
 
     except (json.JSONDecodeError, OSError):
         return []
@@ -26,10 +36,7 @@ def load_sounds():
 def save_sounds(sounds):
     DATA_FOLDER.mkdir(exist_ok=True)
 
-    data = {
-        "sounds": sounds
-    }
-
+    data = {"sounds": sounds}
     temporary_file = DATA_FOLDER / "sounds_temp.json"
 
     with open(temporary_file, "w", encoding="utf-8") as file:
