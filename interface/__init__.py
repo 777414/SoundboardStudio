@@ -1,0 +1,1 @@
+# Файлы интерфейса Soundboard Studio
