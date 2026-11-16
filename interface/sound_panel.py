@@ -14,7 +14,8 @@ def create_sound_panel(state):
         corner_radius=15
     )
     panel.grid(row=1, column=0, sticky="nsew", padx=24, pady=12)
-    panel.grid_columnconfigure((0, 1, 2), weight=1)
+    for column in range(3):
+        panel.grid_columnconfigure(column, weight=1)
     state["panel"] = panel
     refresh_sound_panel(state)
 
@@ -26,23 +27,18 @@ def play_sound(state, sound):
         data, sample_rate = sf.read(file_path, dtype="float32")
         sd.play(data, sample_rate)
         state["playing_id"] = sound["id"]
-        state["window"].after(100, lambda: check_playback(state))
+        duration = len(data) / sample_rate
+        state["window"].after(
+            int(duration * 1000) + 150,
+            lambda: finish_playback(state, sound["id"])
+        )
     except Exception as error:
         state["playing_id"] = None
         messagebox.showerror("Ошибка воспроизведения", f"Не удалось воспроизвести звук.\n\n{error}")
 
 
-def check_playback(state):
-    if state["playing_id"] is None:
-        return
-
-    try:
-        stream = sd.get_stream()
-        if stream is not None and stream.active:
-            state["window"].after(100, lambda: check_playback(state))
-        else:
-            state["playing_id"] = None
-    except Exception:
+def finish_playback(state, sound_id):
+    if state["playing_id"] == sound_id:
         state["playing_id"] = None
 
 
