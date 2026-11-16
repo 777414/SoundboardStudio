@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+data/sounds.json
+data/sounds_temp.json
+sounds/custom/*.wav
