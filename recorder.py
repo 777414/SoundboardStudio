@@ -23,6 +23,10 @@ def start_recording(state):
         TEMP_FILE.parent.mkdir(parents=True, exist_ok=True)
 
         sample_rate = 44100
+        messagebox.showinfo(
+            "Запись звука",
+            "Нажми OK, чтобы начать запись. Она продлится 5 секунд."
+        )
         state["recording_data"] = sd.rec(
             int(5 * sample_rate),
             samplerate=sample_rate,
@@ -30,10 +34,6 @@ def start_recording(state):
             dtype="float32"
         )
         state["recording"] = True
-        messagebox.showinfo(
-            "Запись звука",
-            "Запись началась. Запиши звук сейчас — она остановится через 5 секунд."
-        )
         state["window"].after(5100, lambda: finish_recording(state))
     except Exception as error:
         state["recording"] = False
